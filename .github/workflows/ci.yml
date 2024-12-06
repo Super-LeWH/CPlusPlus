@@ -3,33 +3,28 @@ name: C++ CI Build
 on:
   push:
     branches:
-      - master  # 触发工作流的分支，可以根据需要修改
+      - main  # 触发工作流的分支，可以根据需要修改
   pull_request:
     branches:
-      - master  # 触发PR时的工作流分支
+      - main  # 触发PR时的工作流分支
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # 可以选择适合你的操作系统，如ubuntu-latest, windows-latest等
+    runs-on: ubuntu-latest  # 你可以选择适合你的操作系统，如ubuntu-latest, windows-latest等
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up CMake
-      uses: actions/setup-cmake@v3
-      with:
-        cmake-version: '3.30.3'  # 使用你的项目中需要的CMake版本，可以根据实际情况调整
-
-    - name: Set up C++ Build Environment
-      uses: actions/setup-toolchain@v1
-      with:
-        toolchain: 'clang'  # 你也可以根据需要改成gcc或其他工具链
-
-    - name: Install dependencies (optional, based on your project)
+    - name: Install CMake
       run: |
         sudo apt update
-        sudo apt install -y build-essential
+        sudo apt install -y cmake  # 使用 apt 安装 CMake
+
+    - name: Install build tools
+      run: |
+        sudo apt update
+        sudo apt install -y build-essential  # 安装编译工具（gcc, g++等）
 
     - name: Configure CMake project
       run: |
@@ -52,3 +47,58 @@ jobs:
       with:
         name: build-artifacts
         path: build  # 将构建目录上传为构建产物（如果需要）
+
+# name: C++ CI Build
+
+# on:
+#   push:
+#     branches:
+#       - master  # 触发工作流的分支，可以根据需要修改
+#   pull_request:
+#     branches:
+#       - master  # 触发PR时的工作流分支
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest  # 可以选择适合你的操作系统，如ubuntu-latest, windows-latest等
+
+#     steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v3
+
+#     - name: Set up CMake
+#       uses: actions/setup-cmake@v3
+#       with:
+#         cmake-version: '3.30.3'  # 使用你的项目中需要的CMake版本，可以根据实际情况调整
+
+#     - name: Set up C++ Build Environment
+#       uses: actions/setup-toolchain@v1
+#       with:
+#         toolchain: 'clang'  # 你也可以根据需要改成gcc或其他工具链
+
+#     - name: Install dependencies (optional, based on your project)
+#       run: |
+#         sudo apt update
+#         sudo apt install -y build-essential
+
+#     - name: Configure CMake project
+#       run: |
+#         mkdir -p build
+#         cd build
+#         cmake -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles" ../  # 你可以根据需要调整构建类型
+
+#     - name: Build the project
+#       run: |
+#         cd build
+#         cmake --build . --config Release  # 指定构建配置，可以根据需要调整
+
+#     - name: Run tests (optional)
+#       run: |
+#         cd build
+#         cmake --build . --target test  # 如果你的项目有测试，可以启用此步骤
+
+#     - name: Upload build artifacts (optional)
+#       uses: actions/upload-artifact@v3
+#       with:
+#         name: build-artifacts
+#         path: build  # 将构建目录上传为构建产物（如果需要）
