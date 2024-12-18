@@ -1,10 +1,12 @@
 # 为源文件设置变量
 SET(SRCS
-    STLModule.cpp)
+AllInOne.cpp
+)
 
 # 为头文件设置变量
 SET(HEADERS
-    STLModule.h)
+AllInOne.h
+)
 
 # 创建共享库
 add_library(App ${SRCS})
